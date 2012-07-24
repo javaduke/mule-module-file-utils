@@ -1,0 +1,12 @@
+<!-- BEGIN_INCLUDE(file-utils:copy-file) -->
+    <file-utils:copy-file fileName="com.foo" filePath="/my/path" destinationName="helloworld.txt" destinationPath="/tmp" />
+<!-- END_INCLUDE(file-utils:copy-file) -->
+<!-- BEGIN_INCLUDE(file-utils:move-file) -->
+    <file-utils:move-file fileName="com.foo" filePath="/my/path" destinationName="helloworld.txt" destinationPath="/tmp" />
+<!-- END_INCLUDE(file-utils:move-file) -->
+<!-- BEGIN_INCLUDE(file-utils:read-file) -->
+    <file-utils:read-file fileName="com.foo" filePath="/my/path" />
+<!-- END_INCLUDE(file-utils:read-file) -->
+<!-- BEGIN_INCLUDE(file-utils:delete-file) -->
+    <file-utils:delete-file fileName="com.foo" filePath="/my/path" />
+<!-- END_INCLUDE(file-utils:delete-file) -->

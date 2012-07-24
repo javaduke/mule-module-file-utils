@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="mule-config">
+    <global-element type="http://www.mulesoft.org/schema/mule/fileutils/config" name="Fileutils" entity-id="c0b94c02-cad0-4b38-9422-f6583cb23cc7">
+        <properties>
+            <property value="FU" name="name"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="testFlow">
+        <properties>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+        </properties>
+        <lane hadOnlyOneElement="false" entity-id="8b97fff0-1fd1-425e-b599-fed08d022d16">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/vm/endpoint" name="VM" entity-id="57c55709-3a61-4f9d-b667-f0aa0f1ec1ee">
+                <properties>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="vm.in" name="path"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="address"/>
+                    <property name="responseTimeout"/>
+                    <property name="encoding"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="responseTransformer-refs"/>
+                </properties>
+            </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/fileutils/fileutils-connector" name="Fileutils" entity-id="9a93f698-1cc7-4a3d-9d02-b449dfcab3dd">
+                <properties>
+                    <property name="config-ref"/>
+                    <property value="http://www.mulesoft.org/schema/mule/fileutils/copy-file" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property name="config-ref"/>
+                    <property name="destinationName"/>
+                    <property value="/Users/eberman/Desktop/csv" name="destinationPath"/>
+                    <property value="/Users/eberman/Desktop/test.csv" name="fileName"/>
+                    <property name="filePath"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+</mule-configuration>
