@@ -1,0 +1,4 @@
+com.mulesoft.module.fileutils
+com.mulesoft.module.fileutils.adapters
+com.mulesoft.module.fileutils.config
+com.mulesoft.module.fileutils.processors
