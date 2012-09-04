@@ -6,7 +6,7 @@
     <artifactId>mule-module-file-utils</artifactId>
     <version>3.3.0</version>
     <packaging>mule-module</packaging>
-    <name>Mule Cloud Connector</name>
+    <name>Mule File Utils</name>
 
     <properties>
         <mule.version>3.3.0</mule.version>

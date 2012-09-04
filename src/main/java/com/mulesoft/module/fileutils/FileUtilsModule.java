@@ -6,6 +6,7 @@ package com.mulesoft.module.fileutils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Date;
 
 import org.mule.api.annotations.Module;
 import org.mule.api.ConnectionException;
@@ -40,13 +41,17 @@ public class FileUtilsModule
      * @param destinationPath the new location of the file
      * @param destinationName optional new file name (if not set, the source file name is used)
      * @param overrideIfExists if the file exists in the destination, delete it before copying (true by default)
+     * @param preserveDate if set to true, the original file date will be preserved (true by default)
+     * @param fileAge minimum file age in milliseconds requirement
      * 
      * @return full path to the new location
      */
     @Processor
     public String copyFile(String fileName, @Optional String filePath, String destinationPath, 
                            @Optional String destinationName,
-                           @Optional @Default("true") boolean overrideIfExists) throws Exception
+                           @Optional @Default("true") boolean overrideIfExists,
+                           @Optional @Default("true") boolean preserveDate,
+                           @Optional long fileAge) throws Exception
     {
         String fullSrcName = "";
         if (!StringUtils.isEmpty(filePath))
@@ -56,6 +61,16 @@ public class FileUtilsModule
         logger.debug("Source file name is " + fullSrcName);
             
         File srcFile = new File(fullSrcName);
+        //Check the age
+        if (fileAge != 0) {
+            long currentTime = new Date().getTime();
+            if (FileUtils.isFileNewer(srcFile, currentTime - fileAge)) {
+                logger.debug("File is newer than " + fileAge + " milliseconds!");
+                throw new Exception("File is newer than " + fileAge + " milliseconds!");
+            }
+            
+        }
+        
         String srcFileShortName = srcFile.getName();
             
         String fullDestName = "";
@@ -77,7 +92,10 @@ public class FileUtilsModule
             FileUtils.forceDelete(destFile);
         }
         
-        FileUtils.copyFile(srcFile, destFile, true);
+        if (srcFile.isDirectory())
+            FileUtils.copyDirectory(srcFile, destFile, preserveDate);
+        else
+            FileUtils.copyFile(srcFile, destFile, preserveDate);
         
         return fullDestName;
     }
@@ -92,12 +110,14 @@ public class FileUtilsModule
      * @param destinationPath the new location of the file
      * @param destinationName optional new file name (if not set, the source file name is used)
      * @param overrideIfExists if the file exists in the destination, delete it before copying (true by default)
+     * @param fileAge minimum file age in milliseconds requirement
      * 
      * @return full path to the new location
      */
     @Processor
     public String moveFile(String fileName, @Optional String filePath, String destinationPath, 
-                           @Optional String destinationName, @Optional @Default("true") boolean overrideIfExists) throws Exception
+                           @Optional String destinationName, @Optional @Default("true") boolean overrideIfExists,
+                           @Optional long fileAge) throws Exception
     {
         String fullSrcName = "";
         if (!StringUtils.isEmpty(filePath))
@@ -107,6 +127,15 @@ public class FileUtilsModule
         logger.debug("Source file name is " + fullSrcName);
             
         File srcFile = new File(fullSrcName);
+        
+        if (fileAge != 0) {
+            long currentTime = new Date().getTime();
+            if (FileUtils.isFileNewer(srcFile, currentTime - fileAge)) {
+                logger.debug("File is newer than " + fileAge + " milliseconds!");
+                throw new Exception("File is newer than " + fileAge + " milliseconds!");
+            }
+            
+        }
         String srcFileShortName = srcFile.getName();
             
         String fullDestName = "";
@@ -128,7 +157,10 @@ public class FileUtilsModule
             FileUtils.forceDelete(destFile);
         }
    
-        FileUtils.moveFile(srcFile, destFile);
+        if (srcFile.isDirectory())
+            FileUtils.moveDirectory(srcFile, destFile);
+        else
+            FileUtils.moveFile(srcFile, destFile);
         
         return fullDestName;
     }
